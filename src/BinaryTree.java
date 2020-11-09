@@ -104,7 +104,6 @@ public class BinaryTree<E extends Comparable<E>> implements Iterable<E> {
         }
 
         list.add(temp.getData());
-        System.out.println(temp.getData());
 
         if(temp.getLeft() != null){
             inOrder(temp.getLeft(),list);
@@ -124,12 +123,14 @@ public class BinaryTree<E extends Comparable<E>> implements Iterable<E> {
 
             @Override
             public boolean hasNext() {
-                return inOrder.isEmpty();
+                return !inOrder.isEmpty();
             }
 
             @Override
             public E next() {
-                return inOrder.pop();
+                E data = inOrder.firstElement();        //Popping a stack reverses it, so we have to undo that.
+                inOrder.remove(0);                 //Here we "Dequeue"
+                return data;
             }
         };
     }
@@ -177,18 +178,19 @@ public class BinaryTree<E extends Comparable<E>> implements Iterable<E> {
     private static void testBinaryTree(){
         BinaryTree<PocketMonster> tree = new BinaryTree<>();
         ArrayList<PocketMonster> list = new ArrayList<>();
-        System.out.println("We are running this crap!");
-        for(int i = 0; i < 20; i++){
+        for(int i = 0; i < 25; i++){
             PocketMonster pm = PocketMonster.createPocketMonster();
             tree.add(pm);
             list.add(pm);
+        }
+        for(PocketMonster pm : tree){
+            System.out.println(pm.getName() + " Type: " + pm.getType().name() + " Score: " + pm.getHp() * pm.getDamage());
         }
         list.sort(PocketMonster::compareTo);
         List<PocketMonster> treeTraversed = tree.inOrder();
         if(treeTraversed.size() != list.size()) System.out.println("FAILED! Sizes do not match!");
         for(int i = 0; i < list.size(); i++){
             if(!treeTraversed.get(i).equals(list.get(i))) System.out.println("FAILED! Not in sort order at index " + i);
-            System.out.println(treeTraversed.get(i) + " " + list.get(i));
         }
     }
 
