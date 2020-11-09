@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,9 +9,19 @@ import java.util.List;
  * dataset but still need to be able to quickly get their s*** together
  * in case someone wants things in order.
  */
-public class BinaryTree<E extends Comparable> implements Iterable<E> {
+public class BinaryTree<E extends Comparable<E>> implements Iterable<E> {
+    /**
+     * The top of this binary tree
+     */
     private TreeNode<E> root;
+    /**
+     * The size of this tree
+     */
+    private int size = 0;
 
+    /**
+     * Instantiates an empty binary tree
+     */
     public BinaryTree(){
 
     }
@@ -53,6 +64,11 @@ public class BinaryTree<E extends Comparable> implements Iterable<E> {
         return null;
     }
 
+    /**
+     * An iterator which traverses through our tree
+     *
+     * @return an Iterator which traverses our btree in order
+     */
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
@@ -72,6 +88,10 @@ public class BinaryTree<E extends Comparable> implements Iterable<E> {
     }
 
 
+    /**
+     * The node used for the binary tree
+     * @param <E>
+     */
     class TreeNode<E>{
         private TreeNode<E> left;
         private TreeNode<E> right;
@@ -104,5 +124,26 @@ public class BinaryTree<E extends Comparable> implements Iterable<E> {
         public void setData(E data) {
             this.data = data;
         }
+    }
+
+
+    private static void testBinaryTree(){
+        BinaryTree<PocketMonster> tree = new BinaryTree<>();
+        ArrayList<PocketMonster> list = new ArrayList<>();
+        for(int i = 0; i < 150; i++){
+            PocketMonster pm = PocketMonster.createPocketMonster();
+            tree.add(pm);
+            list.add(pm);
+        }
+        list.sort(PocketMonster::compareTo());
+        List<PocketMonster> treeTraversed = tree.inOrder();
+        if(treeTraversed.size() != list.size()) System.out.println("FAILED! Sizes do not match!");
+        for(int i = 0; i < list.size(); i++){
+            if(!treeTraversed.get(i).equals(list.get(i))) System.out.println("FAILED! Not in sort order at index " + i);
+        }
+    }
+
+    public static void main(String args[]){
+        testBinaryTree();
     }
 }
