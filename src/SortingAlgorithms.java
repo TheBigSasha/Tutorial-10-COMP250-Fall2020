@@ -160,7 +160,14 @@ public class SortingAlgorithms {
 
     @benchmark(name = "inorder traverse", category = "Binary Tree")
     public static long testInOrderTraversal(long input){
-        return 0l;  //TODO
+        BinaryTree<String> bTree = new BinaryTree<>();
+        for(long i = 0; i <input; i++){
+            bTree.add(((char) rand.nextInt(400) + " Test " + i + " ---- " + " " + (char) rand.nextInt(400)));
+        }
+        long startTime = System.nanoTime();
+        bTree.inOrder();
+        long endTime = System.nanoTime();
+        return startTime-endTime;
     }
 
     @benchmark(name = "reverse order traverse", category = "Binary Tree")
